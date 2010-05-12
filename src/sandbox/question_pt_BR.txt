@@ -1,0 +1,86 @@
+Olá:
+
+Estou experimentando usar Programação Paralela em Scala. Baseado neste exemplo 
+do site StackOverflow (http://stackoverflow.com/questions/1751953/concurrent-map-foreach-in-scala),
+criei um programa baseado no Problema 1 do Project Euler (http://projecteuler.net/index.php?section=problems&id=1).
+Experimentei três modos: O primeiro é uma execução simples, sem paralelismo. O
+segundo usando a API do java.util.concurrency, através de Executors (http://java.sun.com/javase/6/docs/api/java/util/concurrent/Executors.html)
+e Callables (http://java.sun.com/javase/6/docs/api/java/util/concurrent/Callable.html).
+O Terceiro, baseado na sugestão da página do StackOverflow, usando scala.Futures 
+(http://www.scala-lang.org/docu/files/api/scala/actors/Futures$object.html). O objetivo 
+é comparar os tempos de se percorrer o range paralelamente e executar a soma.
+Segue-se o código:
+
+package sandbox
+
+import java.util.concurrent._
+import scala.actors._
+
+object TestPool {
+  
+  def eval(n: Int): Boolean = (n % 3 == 0) || (n % 5 == 0)
+  
+  def runSingle(max: Int): Int = (1 until max).filter(eval(_)).foldLeft(0)(_ + _)
+  
+  def runPool(max: Int): Int = {
+    
+    def getCallable(i: Int): Callable[Boolean] = new Callable[Boolean] { def call = eval(i) }
+    
+    val pool = Executors.newFixedThreadPool(5)
+    val result = (1 until max).filter(i => pool.submit(getCallable(i)).get).foldLeft(0)(_ + _)
+    pool.shutdown
+    pool.awaitTermination(Math.MAX_LONG, TimeUnit.SECONDS)
+    
+    result
+  }
+  
+  def runFutures(max: Int): Int = (1 until max).filter(i => Futures.future(eval(i)).apply).foldLeft(0)(_ + _)
+  
+  /**
+   * f é a função a ser executada. O retorno é uma Tuple2 contendo a soma e o 
+   * tempo de execução.
+   */
+  def test(max: Int, f: Int => Int): (Int, Long) = {
+    val t0 = System.currentTimeMillis
+    val result = f(max)
+    val deltaT = System.currentTimeMillis - t0
+    
+    (result, deltaT)
+  }
+  
+  
+  def main(args : Array[String]) : Unit = {
+    val max = 10000
+    
+    println("Single : " + test(max, runSingle))
+    println("Pool   : " + test(max, runPool))
+    println("Futures: " + test(max, runFutures))
+  }
+}
+
+O resultados que obtive foram os seguntes:
+- max = 10:
+Single : (23,31)
+Pool   : (23,16)
+Futures: (23,31)
+
+- max = 100:
+Single : (2318,33)
+Pool   : (2318,31)
+Futures: (2318,55)
+
+- max = 1000:
+Single : (233168,42)
+Pool   : (233168,111)
+Futures: (233168,364)
+
+- max = 10000:
+Single : (23331668,144)
+Pool   : (23331668,544)
+Futures: ... demorou muito e cancelei a execução
+
+Claramente usando as APis de concorrencia do Java e de Scala não está gerando os resultados esperados.
+Portanto eu pergunto: Onde estou errando? Qual seria a forma mais adequada de se 
+utilizar a Concorrência? E quanto aos atores de Scala? Como eles poderiam ser utilizados?
+
+Grato

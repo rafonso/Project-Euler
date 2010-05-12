@@ -1,0 +1,191 @@
+Olá:
+
+Desculpe a demora, mas aí vai a minha resposta. Em primeiro lugar nunca lidei 
+de verdade com multiprocessamento, de forma que parece ainda terei que ralar mais.
+Além disso ainda não consegui entender o esquema dos Actors de Scala. De 
+qualquer forma, experimentei a sua sugestão de Actors e também usando 
+ExecutorSevice/Callables conforme me foi sugerido no fórum do GUJ 
+(http://www.guj.com.br/posts/list/197163.java).
+Segue-se o código:
+
+package sandbox
+
+import java.util.concurrent._
+import scala.actors._
+
+object TestPool {
+  
+  def eval(n: Int): Boolean = (n % 3 == 0) || (n % 5 == 0)
+  
+  def closePool(pool: ExecutorService) {
+    pool.shutdown
+    pool.awaitTermination(Math.MAX_LONG, TimeUnit.SECONDS)
+  }
+  
+  def runSingle(max: Int): Long = (1 until max).filter(eval(_)).foldLeft(0L)(_ + _)
+  
+  def runPool(max: Int): Long = {
+    
+    def getCallable(i: Int): Callable[Boolean] = new Callable[Boolean] { def call = eval(i) }
+    
+    val pool = Executors.newCachedThreadPool 
+    val result = (1 until max).filter(i => pool.submit(getCallable(i)).get).foldLeft(0L)(_ + _)
+    closePool(pool)
+    
+    result
+  }
+  
+  def runPoolJava(max: Int): Long = {
+    var sum = 0L
+    
+    class SumCallable(n: Int) extends Callable[Int] {
+      def call = {
+        if(eval(n)) sum += n
+        n
+      }
+    }
+    
+    val callables: java.util.List[Callable[Int]] = new java.util.ArrayList[Callable[Int]](max + 1)
+    (1 until max).foreach(i => callables.add(new SumCallable(i)))
+    
+    val pool = Executors.newCachedThreadPool 
+    pool.invokeAll(callables)
+    closePool(pool)
+    
+    sum
+  }
+  
+  def runActors(max: Int): Long = {
+    import scala.actors.Actor._
+    
+    case class Add(n: Int)
+    
+    case object Result
+    
+    val act = actor {
+      var sum = 0L
+      loop {
+        react {
+          case Add(n) => if (eval(n)) { sum += n }
+          case Result => reply(sum); exit
+        }
+      }
+    }
+   
+    for (i <- 1 until max) act ! Add(i)
+   
+    act !? Result match {
+      case result => result.toString.toLong
+    }
+  }
+
+  
+  /**
+   * f é a função a ser executada. O retorno é uma Tuple2 contendo a soma e o 
+   * tempo de execução.
+   */
+  def test(max: Int, f: Int => Long): (Long, Long) = {
+    val t0 = System.currentTimeMillis
+    val result = f(max)
+    val deltaT = System.currentTimeMillis - t0
+    
+    (result, deltaT)
+  }
+  
+  def testMax(max: Int) {
+    println("* Max = " + max)
+    println("Single  : " + test(max, runSingle))
+    println("Pool    : " + test(max, runPool))
+    println("PoolJava: " + test(max, runPoolJava))
+    println("Actors  : " + test(max, runActors))
+    println
+  }
+  
+  def main(args : Array[String]) : Unit = {
+    Array(0, 1, 3, 10, 30, 100, 300, 1000, 3000, 10000, 30000, 100000).foreach(testMax(_))
+  }
+}
+
+
+Os resultados, infelizmente não foram muito melhores. E Além disso, no caso de 
+PoolJava (ExecutorSevice/Callables) o resultado tornou-se errado a partir para 
+10000 e 100000.
+
+* Max = 0
+Single  : (0,14)
+Pool    : (0,169)
+PoolJava: (0,2)
+Actors  : (0,170)
+
+* Max = 1
+Single  : (0,0)
+Pool    : (0,0)
+PoolJava: (0,0)
+Actors  : (0,15)
+
+* Max = 3
+Single  : (0,1)
+Pool    : (0,19)
+PoolJava: (0,4)
+Actors  : (0,8)
+
+* Max = 10
+Single  : (23,0)
+Pool    : (23,6)
+PoolJava: (23,16)
+Actors  : (23,19)
+
+* Max = 30
+Single  : (195,2)
+Pool    : (195,11)
+PoolJava: (195,10)
+Actors  : (195,19)
+
+* Max = 100
+Single  : (2318,1)
+Pool    : (2318,3)
+PoolJava: (2318,8)
+Actors  : (2318,8)
+
+* Max = 300
+Single  : (20850,2)
+Pool    : (20850,45)
+PoolJava: (20850,29)
+Actors  : (20850,19)
+
+* Max = 1000
+Single  : (233168,8)
+Pool    : (233168,71)
+PoolJava: (233168,98)
+Actors  : (233168,122)
+
+* Max = 3000
+Single  : (2098500,33)
+Pool    : (2098500,203)
+PoolJava: (2098500,147)
+Actors  : (2098500,216)
+
+* Max = 10000
+Single  : (23331668,48)
+Pool    : (23331668,189)
+PoolJava: (23323633,355)
+Actors  : (23331668,417)
+
+* Max = 30000
+Single  : (209985000,62)
+Pool    : (209985000,170)
+PoolJava: (209985000,425)
+Actors  : (209985000,138)
+
+* Max = 100000
+Single  : (2333316668,12)
+Pool    : (2333316668,518)
+PoolJava: (2333253053,1103)
+Actors  : (2333316668,315)
+
+
+Pelo visto ainda há muito o que aprender nesta área. :(
+
+Grato, 
+
+Rafael U. C. Afonso

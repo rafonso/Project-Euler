@@ -1,0 +1,86 @@
+Hello:
+
+I am trying use Concurrent programming in Scala. Based in this example here in 
+StackOverflow (http://stackoverflow.com/questions/1751953/concurrent-map-foreach-in-scala), 
+I made a program based on Problem 1 of Project Euler (http://projecteuler.net/index.php?section=problems&id=1).
+I try three methods: The first one is a simple execution, with no paralelism. The 
+second uses java.util.concurrency API through Executors 
+(http://java.sun.com/javase/6/docs/api/java/util/concurrent/Executors.html)
+and Callables (http://java.sun.com/javase/6/docs/api/java/util/concurrent/Callable.html).
+The third, based on page mentioned above, using scala.Futures 
+(http://www.scala-lang.org/docu/files/api/scala/actors/Futures$object.html). 
+My objective is compare the execution times.
+This is the code:
+
+package sandbox
+
+import java.util.concurrent._
+import scala.actors._
+
+object TestPool {
+  
+  def eval(n: Int): Boolean = (n % 3 == 0) || (n % 5 == 0)
+  
+  def runSingle(max: Int): Int = (1 until max).filter(eval(_)).foldLeft(0)(_ + _)
+  
+  def runPool(max: Int): Int = {
+    
+    def getCallable(i: Int): Callable[Boolean] = new Callable[Boolean] { def call = eval(i) }
+    
+    val pool = Executors.newFixedThreadPool(5)
+    val result = (1 until max).filter(i => pool.submit(getCallable(i)).get).foldLeft(0)(_ + _)
+    pool.shutdown
+    pool.awaitTermination(Math.MAX_LONG, TimeUnit.SECONDS)
+    
+    result
+  }
+  
+  def runFutures(max: Int): Int = (1 until max).filter(i => Futures.future(eval(i)).apply).foldLeft(0)(_ + _)
+  
+  /**
+   * f is the function to be runned. it returns a Tuple2 containing the sum and the 
+   * execution time.
+   */
+  def test(max: Int, f: Int => Int): (Int, Long) = {
+    val t0 = System.currentTimeMillis
+    val result = f(max)
+    val deltaT = System.currentTimeMillis - t0
+    
+    (result, deltaT)
+  }
+  
+  
+  def main(args : Array[String]) : Unit = {
+    val max = 10000
+    
+    println("Single : " + test(max, runSingle))
+    println("Pool   : " + test(max, runPool))
+    println("Futures: " + test(max, runFutures))
+  }
+}
+
+These are the results:
+
+- max = 10:
+Single : (23,31)
+Pool   : (23,16)
+Futures: (23,31)
+
+- max = 100:
+Single : (2318,33)
+Pool   : (2318,31)
+Futures: (2318,55)
+
+- max = 1000:
+Single : (233168,42)
+Pool   : (233168,111)
+Futures: (233168,364)
+
+- max = 10000:
+Single : (23331668,144)
+Pool   : (23331668,544)
+Futures: ... I cancelled execution after 3 minutes
+
+Obviously I could not use concurrency API from Java and Scala correctly. So I ask: 
+Where is my mistake? What is the more appropriate form of using Concurrency? 
+And about Scala Actors? Is it possible use them?
