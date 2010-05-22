@@ -26,9 +26,9 @@ package eulerProject
  * Where 
  * s = q + r (5)
  * From (1)
- * q * r = A / p (6)
+ * q * r = A / p  = d (6)
  * Appling (6) in (4)
- * p * s + A / p = 1 (7)
+ * p * s + d = 1 (7)
  * s = (p - A) / p ^ 2 (8)
  * How p > 0, A > 0 and A > p
  * s < 0 (9)
@@ -38,7 +38,7 @@ package eulerProject
  * 
  * -> p é divisor de A
  * -> s = q + r = (p - A) / p^2, deve ser um inteiro negativo
- * -> Não é o foco encontrar os valores de q e r. apenassaber que eles existem.
+ * -> q e r são a solução da equação (s +- sqrt(s^2 - 4 * d)) / 2, onde d = A / p
  * <pre>
  */
 object Problem221a {
