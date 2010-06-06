@@ -1,4 +1,4 @@
-package eulerProject
+package eulerProject.solved.failed
 
 /**
  * Problem 135: Determining the number of solutions of the equation 
@@ -17,56 +17,38 @@ package eulerProject
  * <b>How many values of n less than one million have exactly ten distinct solutions?</b><br>
  * <br>
  */
-object Problem135c {
+object Problem135b {
   
-  class Solution(x: Int, delta: Int, n: Int) {
+  class Solution(z: Int, delta: Int, n: Int) {
     
-    lazy val y = x - delta 
+    val y = z + delta 
     
-    lazy val z = x - 2 * delta
+    val x = y + delta
     
     override def toString =  "(%,9d, %,9d, %,9d) ".format(x, y, z)
   }
   
-  def printSolutionsForN(n: Int, solutions: List[Solution]) = {
+  def printSolutions(n: Int, solutions: List[Solution]) = {
     print("sol(%,10d) = ".format(n))
     solutions.foreach(print(_))
     println
   }
   
-  /*
-   * x^2 - y^2 - z^2 = n, y = x - d, z = x - 2 * d
-   *  --> x^2 - 6 * d * x + (5 * d ^2 + n) = 0
-   * <--> x = 3 * d +- sqrt(4 * d ^2 - n)
-   * 
-   * 4 * d ^ 2 - n >= 0 <--> d >= sqrt(n) / sqrt(2)
-   * 
-   * z >= 0 <--> x - 2 * d >= 0 <--> 3 * d +- sqrt(4 * d ^2 - n) - 2 * d >= 0
-   * <--> +- sqrt(4 * d ^2 - n) >= - d <--> 4 * d ^2 - n >= d ^2 
-   * <--> 3 * d^2 >= n <--> d >= sqrt(n) / sqrt(3)
-   * 
-   * How 1 / sqrt(3) > 1 / sqrt(2) --> dMin = sqrt(n) / sqrt(3) = sqrt(3 * n) / 3
-   */
   def verifyDelta(n: Int, delta: Int, deltaMax: Int, numMaxSolutions: Int, solutions: List[Solution]): Option[List[Solution]] = {
-  
+    
     def getSolutionForRoot0 = {
-      if(solutions.size + 1 <= numMaxSolutions) Some(new Solution(3 * delta, delta, n) :: solutions)
+      if(solutions.size + 1 <= numMaxSolutions) Some(new Solution(delta, delta, n) :: solutions)
       else None
     }
     
-    def getSolutionForRoot(root: Int) = {
-      val aux = 3 * delta
-      val solutionMinus = new Solution(aux - root, delta, n)
-      val solutionPlus  = new Solution(aux + root, delta, n)
-      
-      if(solutionMinus.z > 0) {
-        if(solutions.size + 2 <= numMaxSolutions) Some(solutionPlus :: solutionMinus :: solutions)
-        else None
-      } else if(solutions.size + 1 <= numMaxSolutions) {
-        Some(solutionPlus :: solutions)
-      } else {
-        None
-      } 
+    def getSolutionForRootGreaterThanDelta(root: Int) = {
+      if(solutions.size + 1 <= numMaxSolutions) Some(new Solution(delta + root, delta, n) :: solutions)
+      else None 
+    }
+    
+    def getSolutionForRootLesserThanDelta(root: Int) = {
+      if(solutions.size + 2 <= numMaxSolutions) Some(new Solution(delta - root, delta, n) :: new Solution(delta + root, delta, n) :: solutions)
+      else None
     }
     
     if(delta <= deltaMax) {
@@ -74,8 +56,10 @@ object Problem135c {
       if(sqrt.isDefined) {
         val nextSolutions = if(sqrt.get == 0) {
           getSolutionForRoot0
+        } else if(sqrt.get < delta) {
+          getSolutionForRootLesserThanDelta(sqrt.get.intValue)
         } else {
-          getSolutionForRoot(sqrt.get.intValue)
+          getSolutionForRootGreaterThanDelta(sqrt.get.intValue)
         }
         
         if(nextSolutions.isDefined) verifyDelta(n, delta + 1, deltaMax, numMaxSolutions, nextSolutions.get)
@@ -92,10 +76,10 @@ object Problem135c {
   
   def isValidN(n: Int, numMaxSolutions: Int): Boolean = {
     if(n % 10000 == 0) println("%,10d".format(n))
-    val deltaMin = Math.sqrt(3 * n) / 3
-    val deltaMax = n  + 1
+    val deltaMin = Math.sqrt(n) / 2
+    val deltaMax = ((Math.sqrt(n.toLong * (4 * n + 3)) - n) / 3).toInt
     val solutions = verifyDelta(n, deltaMin, deltaMax, numMaxSolutions, Nil)
-    if(solutions.isDefined) printSolutionsForN(n, solutions.get)
+    if(solutions.isDefined) printSolutions(n, solutions.get)
     solutions.isDefined
   }
   
@@ -104,9 +88,7 @@ object Problem135c {
     val numMaxSolutions = 10
     
     val t0 = System.currentTimeMillis
-    val result = 
-//      verifyDelta(27, 3, 28, 2, Nil)
-      (1 until max).filter(isValidN(_, numMaxSolutions)).size
+    val result = (1 until max).filter(isValidN(_, numMaxSolutions)).size
     val deltaT = System.currentTimeMillis - t0
     
     println("==============================")

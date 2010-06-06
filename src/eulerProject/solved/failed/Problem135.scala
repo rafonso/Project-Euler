@@ -1,4 +1,4 @@
-package eulerProject
+package eulerProject.solved.failed
 
 /**
  * Problem 135: Determining the number of solutions of the equation 

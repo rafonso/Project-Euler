@@ -1,6 +1,5 @@
-package eulerProject
+package eulerProject.solved.failed
 
-import scala.actors.Futures._
 
 /**
  * Problem 135: Determining the number of solutions of the equation 
