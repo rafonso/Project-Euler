@@ -67,6 +67,56 @@ object Utils {
     println("[%tT.%tL] %s".format(now, now, msg))
   }
   
+  /**
+   * Classe que retorna o quociente e o resto da divisão de um Número Inteiro.
+   */
+  class IntDivMod(dividend: Int) {
+    
+    /**
+     * Retorna o quociente e o resto da divisão de dois {@link Int Inteiro}s
+     * 
+     * @param divisor Divisor {@link Int Inteiro}
+     * @return O quociente e o resto da divisão como dois {@link Int Inteiro}s.
+     */
+    def /% (divisor: Int):  (Int, Int)   = (this.dividend / divisor, this.dividend % divisor)
+    
+    /**
+     * Retorna o quociente e o resto da divisão de um {@link Int Inteiro} por um {@link Long}
+     * 
+     * @param divisor Divisor {@link Long}
+     * @return O quociente e o resto da divisão como dois {@link Long}s.
+     */
+    def /% (divisor: Long): (Long, Long) = (this.dividend / divisor, this.dividend % divisor)
+    
+  } 
+  
+  /**
+   * Classe que retorna o quociente e o resto da divisão de um Long.
+   */
+  class LongDivMod(dividend: Long) {
+    
+    /**
+     * Retorna o quociente e o resto da divisão de dois {@link Long}s
+     * 
+     * @param divisor Divisor {@link Long}
+     * @return O quociente e o resto da divisão como dois {@link Long}s.
+     */
+    def /% (divisor: Long): (Long, Long) = (this.dividend / divisor, this.dividend % divisor)
+    
+    /**
+     * Retorna o quociente e o resto da divisão de um {@link Long} por um {@link Int Inteiro}
+     * 
+     * @param divisor Divisor {@link Int Inteiro}
+     * @return O quociente e o resto da divisão como dois {@link Long}s.
+     */
+    def /% (divisor: Int):  (Long, Long) = (this.dividend / divisor, this.dividend % divisor)
+    
+  }
+  
+  implicit def intToDivMod(dividend: Int)   = new IntDivMod (dividend)
+  
+  implicit def longToDivMod(dividend: Long) = new LongDivMod(dividend)
+  
   def main(args : Array[String]) : Unit = {
     println(getPrimesUntil(100))
   }

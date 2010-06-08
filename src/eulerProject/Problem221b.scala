@@ -70,7 +70,7 @@ object Problem221b {
   
   def isAlexandrian(a: Long): Option[Alexandrian] = {
     
-    def getQ(p: Long, s: Long, deltaRoot: Long): Option[Alexandrian] = /%(p * s - deltaRoot, 2 * p) match {
+    def getQ(p: Long, s: Long, deltaRoot: Long): Option[Alexandrian] = (p * s - deltaRoot) /% (2 * p) match {
       case (q, 0) => Some((p, q, s - q))
       case _ => None
     }
@@ -84,7 +84,7 @@ object Problem221b {
       case _ => None
     }
     
-    def getS(p: Long): Option[Long] = /%(p - a, p * p) match {
+    def getS(p: Long): Option[Long] = (p - a) /% (p * p) match {
       case (s, 0) => Some(s)
       case _ => None
     }
