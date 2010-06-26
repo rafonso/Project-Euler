@@ -117,8 +117,23 @@ object Utils {
   
   implicit def longToDivMod(dividend: Long) = new LongDivMod(dividend)
   
+  def intToBoolList(n: Int, size: Int): List[Boolean] = {
+    
+    def fillZeros(strBin: String): String = {
+      if(strBin.size < size) fillZeros("0" + strBin)
+      else if(strBin.size == size) strBin
+      else error("Conversao de " + n + " para binário gerou '" + strBin 
+                 + "' de tamanho " + strBin.size 
+                 + " quando o tamanho máximo deve ser " + size)
+    }
+    
+    fillZeros(n.toBinaryString).map(ch => if(ch == '1') true else false).toList
+  } 
+    
+  
   def main(args : Array[String]) : Unit = {
-    println(getPrimesUntil(100))
+//    println(numberToBinString(3624, 13))
+    println(intToBoolList(3624, 13))
   }
 
 }

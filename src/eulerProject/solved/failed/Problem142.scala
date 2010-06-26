@@ -1,4 +1,4 @@
-package eulerProject
+package eulerProject.solved.failed
 
 /**
  * Problem 142: Perfect Square Collection<br>
