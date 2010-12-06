@@ -71,7 +71,7 @@ object Problem049a {
   def main(args : Array[String]) : Unit = {
     val t0 = System.currentTimeMillis
     println("Getting Primes")
-    val myPrimes = Utils.getPrimesUntil(10000).filter(_ > 1000)
+    val myPrimes = eulerProject.Utils.getPrimesUntil(10000L).filter(_ > 1000)
     println("Getting Palindromes")
     val palindromes = getPalindromes(myPrimes).filter(_.size >= 3)
     println("Getting Our Palindromes")

@@ -32,7 +32,7 @@ package eulerProject.solved
  */
 object Problem027 {
   
-  def getQuantityOfPrimes(a: Int, b: Int, primeIterator: PrimeIterator): Int = {
+  def getQuantityOfPrimes(a: Int, b: Int, primeIterator: eulerProject.PrimeIterator): Int = {
     
     def eval(n: Int): Int = {
       val value = n * n + a * n + b
@@ -44,7 +44,7 @@ object Problem027 {
   }
   
   def getResult(): (Int, Int, Int) = {
-    val it = new PrimeIterator
+    val it = new eulerProject.PrimeIterator
     it.iterateUntil(1000)
     val bValues = it.getAccumulatedPrimes
 //    println(bValues)

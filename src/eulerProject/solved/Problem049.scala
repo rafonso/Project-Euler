@@ -21,7 +21,7 @@ object Problem049 {
   
   def getPrimesFromTo(from: Long, to: Long): List[Long] = {
       
-    val primeIterator = new PrimeIterator
+    val primeIterator = new eulerProject.PrimeIterator
     val p = primeIterator.iterateUntil(from)
     val myPrimes = new scala.collection.mutable.ListBuffer[Long]
     while(primeIterator.next < to) myPrimes += primeIterator.head

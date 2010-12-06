@@ -51,7 +51,7 @@ object Problem131c {
     
     val t0 = System.currentTimeMillis
     val primes = Set.empty[Long] + getPrimesUntil(max)
-    val result = getPrimesUntil(max).size
+    val result = getPrimesUntil(max.toLong).size
     val deltaT = System.currentTimeMillis - t0
     
     println("=" * 80)

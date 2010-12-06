@@ -26,7 +26,7 @@ object Problem021 {
       if(x > n / 2) divisors
       else if(divisors.contains(x)) generateDivisors(x + 1, divisors)
       else {
-        val (division, remainder) = Utils./%(n, x)
+        val (division, remainder) = eulerProject.Utils./%(n, x)
         if(remainder == 0) generateDivisors(x + 1, divisors + (x, division))
         else generateDivisors(x + 1, divisors)
       }

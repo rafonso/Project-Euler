@@ -45,7 +45,7 @@ import java.util.concurrent.Future;
  */
 public class Problem066Java {
 
-	private final static class DiopahntineComparator implements
+	public final static class DiopahntineComparator implements
 			Comparator<Diophantine> {
 		@Override
 		public int compare(Diophantine d1, Diophantine d2) {

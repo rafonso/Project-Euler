@@ -16,7 +16,7 @@ object Problem216 {
   
   def isT(prime: Long): Boolean = {
     val quadraticN: Int = (prime.intValue + 1) / 2
-    val n: Int = Math.sqrt(quadraticN)
+    val n: Int = Math.sqrt(quadraticN).toInt
     (quadraticN == n * n)
   }
   
@@ -25,7 +25,7 @@ object Problem216 {
     val max = 2 * n * n - 1
     
     val t0 = System.currentTimeMillis
-    val result = Utils.getPrimesUntil(max).size
+    val result = Utils.getPrimesUntil(max.toLong).size
     val deltaT = System.currentTimeMillis - t0
     
     println("==============================")

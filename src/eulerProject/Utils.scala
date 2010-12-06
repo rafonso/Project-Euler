@@ -58,8 +58,10 @@ object Utils {
     else Left(Math.sqrt(n.doubleValue))
   }
   
+  @deprecated("Use /% no lugar")
   def /%(num: Int , div: Int ): (Int , Int ) = (num / div, num % div)
   
+  @deprecated("Use /% no lugar")
   def /%(num: Long, div: Long): (Long, Long) = (num / div, num % div)
   
   def log(msg: Any) {

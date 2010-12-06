@@ -33,7 +33,7 @@ object Problem063 {
   def main(args : Array[String]) : Unit = {
     val max = 100
     val t0 = System.currentTimeMillis
-    val result = (1 to max).flatMap(evaluateN(_)).force
+    val result = (1 to max).flatMap(evaluateN(_))
     val deltaT = System.currentTimeMillis - t0
     
     println("==============================")

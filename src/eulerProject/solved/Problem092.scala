@@ -28,7 +28,7 @@ object Problem092 {
     def eval(n: Int, sum: Int): Int = n match {
       case 0 => sum
       case _ => {
-        val (div, digit) = Utils./%(n, 10)
+        val (div, digit) = eulerProject.Utils./%(n, 10)
         eval(div, sum + squares(digit))
       }
     }

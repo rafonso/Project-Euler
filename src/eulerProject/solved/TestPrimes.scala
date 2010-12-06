@@ -50,13 +50,13 @@ object TestPrimes {
     val eratosthenesTimes = new Array[Long](limits.length)
     val booleanTimes = new Array[Long](limits.length)
     
-    Utils.getPrimesUntil(10)
+    eulerProject.Utils.getPrimesUntil(10L)
     getPrimesUntilBoolean(10)
     
     var i = 0
     limits.foreach(limit => {
       //myTimes(i) =           calculate(limits(i), PrimesUtils.getPrimesUntil, "getPrimesUntil")
-      booleanTimes(i) = calculate(limits(i), Utils.getPrimesUntil, "booleans")
+      booleanTimes(i) = calculate(limits(i), eulerProject.Utils.getPrimesUntil, "booleans")
       i += 1
     })
     

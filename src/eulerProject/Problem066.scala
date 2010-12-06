@@ -76,7 +76,7 @@ object Problem066 {
     val t0 = System.currentTimeMillis
     val result = (1 to max)
       .filter(Utils.getSqrt(_).isLeft)
-      .map(i => future{testD(i)}).force.map(_())
+      .map(i => future{testD(i)}).map(_())
       .toList
     val maxX = getMaxX(result)
     val deltaT = System.currentTimeMillis - t0

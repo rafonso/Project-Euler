@@ -19,7 +19,7 @@ package eulerProject.solved
  */
 object Problem135d {
     
-  import Utils._
+  import eulerProject.Utils._
   
   def nHasSolutions(n: Long, maxSolutions: Int): Boolean = {
     

@@ -42,7 +42,7 @@ object Problem125 {
       }
     }
   
-    val optTerms = getTerms(Math.sqrt(n), 0, Queue.Empty)
+    val optTerms = getTerms(Math.sqrt(n).toInt, 0, Queue.Empty)
     if(optTerms.isDefined) {
       if(optTerms.get.size == 1) false
       else {
@@ -67,7 +67,7 @@ object Problem125 {
     val max = 100000000
     
     val t0 = System.currentTimeMillis
-    val result = (2 to max).filter(isPalidrome(_)).force.filter(isQuadraticSum(_))
+    val result = (2 to max).filter(isPalidrome(_)).filter(isQuadraticSum(_))
     val sum = result.foldLeft(0L)(_ + _)
     val deltaT = System.currentTimeMillis - t0
     

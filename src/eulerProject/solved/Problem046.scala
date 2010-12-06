@@ -25,7 +25,7 @@ object Problem046 {
   
   type CompositeOrNot = Either[Long, (Long, Long)]
   
-  val primes = Utils.getPrimesUntil(10000)
+  val primes = eulerProject.Utils.getPrimesUntil(10000L)
   
   def getSqrt(n: Long): Either[Double, Long] = {
     val sqrtDbl = Math.sqrt(n)

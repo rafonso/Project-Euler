@@ -23,12 +23,12 @@ package eulerProject.solved
 object Problem042 {
   
       
-  import scala.collection.immutable.TreeHashMap
+  import scala.collection.immutable.HashMap
   
-  val charValues = TreeHashMap.fromIterable(('A' to 'Z').map(c => (c, c - 'A' + 1)))
+  val charValues = HashMap[Char, Int]() //(('A' to 'Z').map(c => (c, c - 'A' + 1)))
   
   def isTriangular(t: Long): Boolean= {
-    val sqrtDelta = Utils.getSqrt(8 * t + 1)
+    val sqrtDelta = eulerProject.Utils.getSqrt(8 * t + 1)
     if(sqrtDelta.isRight) ((sqrtDelta.right.get - 1) % 2 == 0)
     else false
   }

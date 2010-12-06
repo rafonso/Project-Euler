@@ -16,7 +16,7 @@ object Problem187a {
     
     
     println("Getting primes until " + (max / 2))
-    val primes = Utils.getPrimesUntil(max / 2)
+    val primes = eulerProject.Utils.getPrimesUntil(max.toLong / 2)
     println("I have " + primes.size + " primes")
     
     getQuantity(primes, 0)

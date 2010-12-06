@@ -23,7 +23,7 @@ object Problem135 {
     val square = 4 * delta * delta - n
     if(square == 0) Set(3 * delta)
     else {
-      val root = Math.sqrt(square)
+      val root = Math.sqrt(square).toInt
       if(root * root == square) {
         val xPlus = 3 * delta + root
         val xMinus = 3 * delta - root
@@ -35,7 +35,7 @@ object Problem135 {
   
   def main(args : Array[String]) : Unit = {
     val n = 1155
-    var delta = Math.sqrt(n) / 2
+    var delta = Math.sqrt(n).toInt / 2
     val solutions = new scala.collection.mutable.HashSet[Int]
     
     while(solutions.size < 10) {

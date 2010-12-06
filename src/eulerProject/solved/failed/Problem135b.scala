@@ -52,7 +52,7 @@ object Problem135b {
     }
     
     if(delta <= deltaMax) {
-      val sqrt = Utils.getSqrt(4 * delta * delta - n).right.toOption
+      val sqrt = eulerProject.Utils.getSqrt(4 * delta * delta - n).right.toOption
       if(sqrt.isDefined) {
         val nextSolutions = if(sqrt.get == 0) {
           getSolutionForRoot0
@@ -76,7 +76,7 @@ object Problem135b {
   
   def isValidN(n: Int, numMaxSolutions: Int): Boolean = {
     if(n % 10000 == 0) println("%,10d".format(n))
-    val deltaMin = Math.sqrt(n) / 2
+    val deltaMin = (Math.sqrt(n) / 2).toInt
     val deltaMax = ((Math.sqrt(n.toLong * (4 * n + 3)) - n) / 3).toInt
     val solutions = verifyDelta(n, deltaMin, deltaMax, numMaxSolutions, Nil)
     if(solutions.isDefined) printSolutions(n, solutions.get)

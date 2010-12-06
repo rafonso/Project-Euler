@@ -56,7 +56,7 @@ object Problem251a {
       }
     }
     
-    val bMax = Math.sqrt(num / 27)
+    val bMax = Math.sqrt(num / 27).toInt
     evaluateB(bMax, 0)
   }
   

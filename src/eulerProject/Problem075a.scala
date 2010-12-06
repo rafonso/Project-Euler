@@ -37,7 +37,7 @@ object Problem075a {
   
   type Triangle = (Long, Long, Long)
   
-  class CounterMap extends scala.collection.jcl.TreeMap[Long, Int]  {
+  class CounterMap extends scala.collection.mutable.HashMap[Long, Int]  {
     
     def add(value: Long) {
       super.put(value, super.getOrElse(value, 0) + 1)

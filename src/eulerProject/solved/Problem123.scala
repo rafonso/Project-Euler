@@ -33,7 +33,7 @@ object Problem123 {
     
     println("getting primes")
     // I read all primes written in a text file. 
-    val primes = Utils.getPrimesUntil
+    val primes = eulerProject.Utils.getPrimesUntil
     println("I have " + primes.size + " primes")
 
     /**

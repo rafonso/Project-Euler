@@ -40,7 +40,7 @@ object Problem120 {
   
   def main(args : Array[String]) : Unit = {
     val t0 = System.currentTimeMillis
-    val maxRemainders = (3 to 20).map(maxRemainder(_)).force
+    val maxRemainders = (3 to 20).map(maxRemainder(_))
     val sum = maxRemainders.foldLeft(0)(_+_)
     val deltaT = System.currentTimeMillis - t0
     

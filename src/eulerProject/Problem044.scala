@@ -40,7 +40,7 @@ object Problem044 {
       } else {
         val pj = pentagonals(j)
         val diff = pk - pj
-        if(pentagonals.values.contains(diff)) {
+        if(pentagonals.valuesIterator.contains(diff)) {
           val sum = pk + pj
           if(isPentagonal(sum)) Some(((j, pj), (k, pk)))
           else evalNAndPriors(j + 1, pentagonals, k, pk)
@@ -59,7 +59,7 @@ object Problem044 {
       else eval(n + 1, pentagonals + (n -> pn))
     }
     
-    eval(1, TreeHashMap.empty)
+    eval(1, TreeMap.empty[Long, Long])
   }
   
   def main(args : Array[String]) : Unit = {

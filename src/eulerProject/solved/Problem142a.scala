@@ -26,7 +26,7 @@ package eulerProject.solved
  */
 object Problem142a {
   
-  import Utils._
+  import eulerProject.Utils._
     
   type Triplet = (Long, Long, Long)
   type OptTriplet = Option[Triplet]

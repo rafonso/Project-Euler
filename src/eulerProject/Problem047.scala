@@ -51,9 +51,9 @@ object Problem047 {
   
   
   def main(args : Array[String]) : Unit = {
-    val primes = Utils.getPrimesUntil(1000)
+    val primes = Utils.getPrimesUntil(1000L)
     val n = 646
-    val limit = Math.sqrt(n)
+    val limit = Math.sqrt(n).toInt
     val maxQuantity = 3
     
     println(getPrimesDivisorsFor(n, primes, limit, maxQuantity, TreeSet.empty[Long]))

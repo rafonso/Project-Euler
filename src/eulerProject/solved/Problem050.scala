@@ -78,7 +78,7 @@ object Problem050 {
   
   def main(args : Array[String]) : Unit = {
     val max = 1000000
-    val primes = Utils.getPrimesUntil(max)
+    val primes = eulerProject.Utils.getPrimesUntil(max.toLong)
     
     val t0 = System.currentTimeMillis
     val result = function2(primes, max)

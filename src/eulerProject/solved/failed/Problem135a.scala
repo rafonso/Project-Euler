@@ -26,7 +26,7 @@ object Problem135a {
     
     def verifyDelta(n: Int, delta: Int, deltaMax: Int, solutions: List[ZDelta]): Option[List[ZDelta]] = {
       if(delta <= deltaMax) {
-        val optSqrt = Utils.getSqrt(4 * delta * delta - n).right.toOption
+        val optSqrt = eulerProject.Utils.getSqrt(4 * delta * delta - n).right.toOption
         if(optSqrt.isDefined && (optSqrt.get > 0)) {
           val zMinus = delta - optSqrt.get
           val zPlus  = delta + optSqrt.get
@@ -60,7 +60,7 @@ object Problem135a {
     
     def isValidN(n: Int): Boolean = {
         if(n % 10000 == 0) println("%,10d".format(n))
-        val deltaMin = Math.sqrt(n) / 2
+        val deltaMin = (Math.sqrt(n) / 2).toInt
         val deltaMax = ((Math.sqrt(n.toLong * (4 * n + 3)) - n) / 3).toInt
         val solutions = verifyDelta(n, deltaMin, deltaMax, Nil)
         if(solutions.isDefined) printSolutions(n, solutions.get)

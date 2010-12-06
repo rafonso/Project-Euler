@@ -12,7 +12,7 @@ object Problem142 {
   
   def evaluateX(x: Long): (Long, Long, Long) = {
     
-    def isPerfectSquare(n: Long)= Utils.getSqrt(n).isRight
+    def isPerfectSquare(n: Long)= eulerProject.Utils.getSqrt(n).isRight
     
     def evaluateZ(y: Long, z: Long): Option[(Long, Long, Long)] = {
       if(y < z) {
